@@ -11,7 +11,7 @@ def calibrator(n):
     objp = objp*18.1  # 18.1 mm
     objpoints = []
     imgpoints = []
-    images_k = glob.glob(r'kalibrierung/*.png')
+    images_k = glob.glob(r'calibration/*.png')
 
     i=0
     for fname in images_k[:n]:
