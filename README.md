@@ -21,7 +21,7 @@ import urx
 from pypylon import pylon
 ```
 
-# Example use> -> General steps 
+# Example use -> General steps 
 ## 1. Calibration of Camera
 Basler Camera will be used to capture the pictures
 First calibrate the camera
