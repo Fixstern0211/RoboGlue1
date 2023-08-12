@@ -22,7 +22,7 @@ from pypylon import pylon
 ```
 
 # Example use> -> General steps 
-## 1. Calibration of camera
+## 1. Calibration of Camera
 Basler Camera will be used to capture the pictures
 First calibrate the camera
 ```python
@@ -31,9 +31,9 @@ size = len(calibration_images)
 mtx, dist, newcameramtx = camera_calibration.calibrator(size)
 ```
 
-## 2. Load the images 
+## 2. Load the Images 
 The images will be loaded and processed
-## 2.1 Instance and load the images
+## 2.1 Instance and load the Images
 ```python
 # size of reference
 w = 240 # width
@@ -41,12 +41,12 @@ h = 170 # heigth
 img_processor = image_process.ImageProcessor(w, h) # instance of ImageProcesser()
 images = img_processor.load_images("src/") # load the image to be processed
 ```
-## 2.2 Correction of distorted images
+## 2.2 Correction of Distorted Images
 ```python
 corrected_images = camera_calibration.correct_distortion(images, mtx, dist, newcameramtx)
 ```
 
-## 2.3 Get the internal contour
+## 2.3 Get the Internal Contour
 ```python
 con_list = img_processor.contour_for_robot(corrected_images, scale)
 # select a image
@@ -54,17 +54,17 @@ con = con_list[index]
 con = [ele/scale/1000 for ele in con]
 ```
 
-## 3. Instance of robot
+## 3. Instance of Robot
 ```python
 robot_controller = controller.RobotController(0,0,0.08)
 robot_controller.initialize(2) # payload 2
 ```
-## 3.1 Move to the default start position
+## 3.1 Move to the Default Start Position
 ```python
 robot_controller.start_pos() # Default start position
 ```
 
-## 3.2 Move along the contour
+## 3.2 Move along the Contour
 ```python
 path = robot_controller.transformation(con)
 robot_controller.move_to(path)
@@ -72,7 +72,7 @@ robot_controller.move_to(path)
 
 
 # Specific Classes and Functions
-## Camera_calibration
+## camera_calibration
 The purpose of these functions is to perform camera calibration, compute distortion parameters, and correct distortion in images.
 ```python
 calibrator(n)
