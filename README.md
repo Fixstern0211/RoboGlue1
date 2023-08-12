@@ -2,10 +2,13 @@
 The aim of the project is to use robotics and computer vision to detect and track the edges of paper fragments. It focuses on analysing the images captured by the camera through computer vision and converting the coordinate information of the pictures into information that can be understood by the robot through coordinate transformation.
 
 Team Members:
-    Huaiyi Dai
-    Ruoxiao Wang
-    Hui Wang
-    Heng Zhang
+```
+Huaiyi Dai
+Ruoxiao Wang
+Hui Wang
+Heng Zhang
+```
+
 
 # used Packages
 Here are all the packages required for this project:
