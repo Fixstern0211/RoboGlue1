@@ -10,39 +10,39 @@ Heng Zhang
 # 1. calibration of camera
 Basler Camera will be used to capture the pictures
 First calibrate the camera
-'''python
+```python
 calibration_images = img_processor.load_images("calibration/")
 size = len(calibration_images)
 mtx, dist, newcameramtx = camera_calibration.calibrator(size)
-'''
+```
 
 # 2. load the images 
 the images will be loaded and processed
 ## 2.1 correction of distorted images
-'''python
+```python
 corrected_images = camera_calibration.correct_distortion(images, mtx, dist, newcameramtx)
+```
 
-'''
 ## 2.2 get the internal contour
-'''python
+```python
 con_list = img_processor.contour_for_robot(corrected_images, scale)
 <!-- select a image -->
 con = con_list[index]
 con = [ele/scale/1000 for ele in con]
-'''
+```
 
 # 3. instance of robot
-'''python
+```python
 robot_controller = controller.RobotController(0,0,0.08)
 robot_controller.initialize(2) # payload 2
-'''
+```
 ## 3.1 
-'''python
+```python
 robot_controller.start_pos() # Default start position
-'''
+```
 
 ## 3.2 move along the contour
-'''python
+```python
 path = robot_controller.transformation(con)
 robot_controller.move_to(path)
-'''
+```
