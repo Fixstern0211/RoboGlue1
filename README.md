@@ -26,9 +26,10 @@ from pypylon import pylon
 Basler Camera will be used to capture the pictures  
 First calibrate the camera
 ```python
+# load the images for camera calibration
 calibration_images = img_processor.load_images("calibration/")
-size = len(calibration_images)
-mtx, dist, newcameramtx = camera_calibration.calibrator(size)
+size = len(calibration_images) # number of images
+mtx, dist, newcameramtx = camera_calibration.calibrator(size) # calibration parameters
 ```
 
 ## 2. Load the Images 
@@ -46,28 +47,29 @@ images = img_processor.load_images("src/") # load the image to be processed
 corrected_images = camera_calibration.correct_distortion(images, mtx, dist, newcameramtx)
 ```
 
-## 2.3 Get the Internal Contour
+## 2.3 Get the inner Contour
 ```python
+# usually the inner contour is the contour we want
 con_list = img_processor.contour_for_robot(corrected_images, scale)
-# select a image
+# select an image, or skip this step if there is only one image
 con = con_list[index]
 con = [ele/scale/1000 for ele in con]
 ```
 
 ## 3. Instance of Robot
 ```python
-robot_controller = controller.RobotController(0,0,0.08)
-robot_controller.initialize(2) # payload 2
+robot_controller = controller.RobotController(0,0,0.08) # the tcp piont (0, 0, 0.08) in metre
+robot_controller.initialize(2) # payload 2 in kg
 ```
 ## 3.1 Move to the Default Start Position
 ```python
 robot_controller.start_pos() # Default start position
 ```
 
-## 3.2 Move along the Contour
+## 3.2 Transformation and Move along the Contour
 ```python
-path = robot_controller.transformation(con)
-robot_controller.move_to(path)
+path = robot_controller.transformation(con) # coordinaten transformation from image to robot
+robot_controller.move_to(path) # Robot moves along a path
 ```
 
 
