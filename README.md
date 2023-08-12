@@ -23,7 +23,7 @@ from pypylon import pylon
 
 # Example use -> General steps 
 ## 1. Calibration of Camera
-Basler Camera will be used to capture the pictures
+Basler Camera will be used to capture the pictures  
 First calibrate the camera
 ```python
 calibration_images = img_processor.load_images("calibration/")
