@@ -9,8 +9,7 @@ Hui Wang
 Heng Zhang
 ```
 
-
-# used Packages
+# Used Packages
 Here are all the packages required for this project:
 ```python
 import cv2
@@ -22,8 +21,8 @@ import urx
 from pypylon import pylon
 ```
 
-# General steps for use
-## 1. calibration of camera
+# Example use> -> General steps 
+## 1. Calibration of camera
 Basler Camera will be used to capture the pictures
 First calibrate the camera
 ```python
@@ -32,9 +31,9 @@ size = len(calibration_images)
 mtx, dist, newcameramtx = camera_calibration.calibrator(size)
 ```
 
-## 2. load the images 
+## 2. Load the images 
 The images will be loaded and processed
-## 2.1 instance and load the images
+## 2.1 Instance and load the images
 ```python
 # size of reference
 w = 240 # width
@@ -42,12 +41,12 @@ h = 170 # heigth
 img_processor = image_process.ImageProcessor(w, h) # instance of ImageProcesser()
 images = img_processor.load_images("src/") # load the image to be processed
 ```
-## 2.2 correction of distorted images
+## 2.2 Correction of distorted images
 ```python
 corrected_images = camera_calibration.correct_distortion(images, mtx, dist, newcameramtx)
 ```
 
-## 2.3 get the internal contour
+## 2.3 Get the internal contour
 ```python
 con_list = img_processor.contour_for_robot(corrected_images, scale)
 # select a image
@@ -55,7 +54,7 @@ con = con_list[index]
 con = [ele/scale/1000 for ele in con]
 ```
 
-## 3. instance of robot
+## 3. Instance of robot
 ```python
 robot_controller = controller.RobotController(0,0,0.08)
 robot_controller.initialize(2) # payload 2
@@ -65,15 +64,15 @@ robot_controller.initialize(2) # payload 2
 robot_controller.start_pos() # Default start position
 ```
 
-## 3.2 move along the contour
+## 3.2 Move along the contour
 ```python
 path = robot_controller.transformation(con)
 robot_controller.move_to(path)
 ```
 
 
-# Specific classes and functions
-## camera_calibration
+# Specific Classes and Functions
+## Camera_calibration
 The purpose of these functions is to perform camera calibration, compute distortion parameters, and correct distortion in images.
 ```python
 calibrator(n)
@@ -164,6 +163,7 @@ display_approx_contour(self, image: any, approx_contour) -> list
 
 ## RobotController
 The purpose of this class is to control a robot to enable it to move along a given contour.
+More details about Python-urx, https://github.com/SintefManufacturing/python-urx
 ```python
 init(self, x, y, z)
     Parameters:
