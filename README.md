@@ -2,10 +2,10 @@
 The aim of the project is to use robotics and computer vision to detect and track the edges of paper fragments. It focuses on analysing the images captured by the camera through computer vision and converting the coordinate information of the pictures into information that can be understood by the robot through coordinate transformation.
 
 Team Members:
-Huaiyi Dai
-Ruoxiao Wang
-Hui Wang
-Heng Zhang
+    Huaiyi Dai
+    Ruoxiao Wang
+    Hui Wang
+    Heng Zhang
 
 # used Packages
 Here are all the packages required for this project:
@@ -88,16 +88,14 @@ correct_distortion(images, mtx, dist, newcameramtx)
         mtx: The intrinsic matrix of the camera.
         dist: Distortion coefficients of the camera.
         newcameramtx: The optimized camera matrix.
-
 ```
-
 
 ## ImagePreocessor
 ```python
 init(self, w, h)
     Parameters:
-        w: Width of the image.
-        h: Height of the image.
+        w: Width of the reference.
+        h: Height of the reference.
 
 load_images(self, path: str) -> list
     Parameters:
@@ -134,8 +132,8 @@ warp_img(self, image: any, points: any, w, h, pad = 10) -> any
     Parameters:
         image: Image to perform perspective transformation on.
         points: Reference points for perspective transformation.
-        w: Width of the transformed image.
-        h: Height of the transformed image.
+        w: Width of the reference.
+        h: Height of the reference.
         pad: Padding size.
 
 find_internal_conturs(self, image: any, threshold: int, scale: float)
@@ -161,8 +159,8 @@ display_approx_contour(self, image: any, approx_contour) -> list
 
 ```
 
-
 ## RobotController
+The purpose of this class is to control a robot to enable it to move along a given contour.
 ```python
 init(self, x, y, z)
     Parameters:
@@ -184,8 +182,6 @@ transformation(self, contour)
 move_to(self, contour)
     Parameters:
         contour: A list of points that define a contour.
-
-The purpose of this class is to control a robot to enable it to move along a given contour.
 
 
 ```
