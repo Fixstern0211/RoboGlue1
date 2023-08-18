@@ -1,6 +1,7 @@
 import numpy as np
 import glob
 import cv2
+import os
 
 def calibrator(n):
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -11,7 +12,18 @@ def calibrator(n):
     objp = objp*18.1  # 18.1 mm
     objpoints = []
     imgpoints = []
-    images_k = glob.glob(r'calibration/*.png')
+    # images_k = glob.glob(r'calibration/*.png')
+    # 获取当前脚本的目录
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # 获取上级目录
+    parent_dir = os.path.dirname(script_dir)
+    # 构建指向'calibration'目录的路径
+    path = os.path.join(parent_dir, 'calibration')
+    # path = "f:/TUB/SS/SS23/APJ/RoBOGlueI/RoBOGlueI/calibration/"
+    files = os.listdir(path)
+    image_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']
+    images_k = [os.path.join(path, x) for x in files if os.path.isfile(os.path.join(path, x)) and os.path.splitext(x)[1].lower() in image_extensions]
+
 
     i=0
     for fname in images_k[:n]:

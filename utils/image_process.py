@@ -21,7 +21,14 @@ class ImageProcessor:
     # read from folder
     def load_images(self, path: str) -> list:
         """Load images from a specified directory"""
+        # 获取当前脚本的目录
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # 获取上级目录
+        parent_dir = os.path.dirname(script_dir)
+        # 构建指向'calibration'目录的路径
+        path = os.path.join(parent_dir, path)
         files = os.listdir(path)
+
         image_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']
         images_files = [os.path.join(path, x) for x in files if os.path.isfile(os.path.join(path, x)) and os.path.splitext(x)[1].lower() in image_extensions]
         images = [cv2.imread(image, 1)[:,:,::-1] for image in images_files]
@@ -102,8 +109,8 @@ class ImageProcessor:
                 else:
                     finalCountours.append([len(appprox),area,appprox,bbox,i])
         finalCountours = sorted(finalCountours, key=lambda x: x[1], reverse=True)
-        for con in finalCountours:
-            cv2.drawContours(image, con[4], -1, 255, 3)
+        for contour in finalCountours:
+            cv2.drawContours(image, contour[4], -1, 255, 3)
         maxArea = np.max(area_list)
         return image, finalCountours, maxArea
 
@@ -131,12 +138,13 @@ class ImageProcessor:
         pts1 = np.float32(points)
         pts2 = np.float32([[0,0], [w,0], [0,h], [w,h]])
         matrix = cv2.getPerspectiveTransform(pts1,pts2)
+        # imgWarp = cv2.warpPerspective(image,matrix,(int(w), int(h)))
         imgWarp = cv2.warpPerspective(image,matrix,(w, h))
         imgWarp = imgWarp[pad:imgWarp.shape[0]-pad, pad:imgWarp.shape[1]-pad]
         return imgWarp
 
     # find the min. area(internal contours)
-    def find_internal_conturs(self, image: any, threshold: int, scale: float):
+    def find_internal_conturs(self, image: any, threshold: int, scale: int):
         contours, hiearchy = cv2.findContours(image, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_NONE)
         contours = [ele for ele in contours if cv2.contourArea(ele) > threshold * scale**2] # filter the contours
         area_list = [cv2.contourArea(ele) / scale**2 for ele in contours] # area for each contour
@@ -145,12 +153,13 @@ class ImageProcessor:
         
     # show internal contours
     def display_contour(self, image: any, contour, area):
+        fig=plt.figure(figsize=(10, 15))
         mask = np.zeros_like(image)
         cv2.drawContours(mask, contour, -1, 255, 3)
         plt.imshow(mask, cmap = "gray")
-        plt.title("Größe= %1.2f mm" %area)
+        plt.title("Größe= %1.2f mm" % area)
         plt.axis('off')
-
+        
     # approximate contour
     def approx_contour(self, contour):
         epsilon = 0.002*cv2.arcLength(contour,True) # experience value
@@ -162,7 +171,10 @@ class ImageProcessor:
     # print an approximate contours
     def display_approx_contour(self, image: any, approx_contour) -> list:
         """show an approximate contours"""
-        mask = np.zeros_like(image)
+        fig=plt.figure(figsize=(10, 5))
+        # mask = np.zeros_like(image)
+        mask = np.zeros(image.shape[:2], dtype=np.uint8)
+
         cv2.drawContours(mask, approx_contour, -1, 255, 3)
         plt.imshow(mask, cmap = "gray")
         plt.title("approxPolyDP")
@@ -170,7 +182,11 @@ class ImageProcessor:
 
 
     def contour_for_robot(self, corrected_images: any, scale) -> list:
-        contours_list = []
+        images = []
+        contours = []
+        areas = []
+        appro_contours_list = []
+        filter = 4
         for i in range(len(corrected_images)):
 
             c_img = self.preprocess(corrected_images[i])
@@ -188,22 +204,23 @@ class ImageProcessor:
             kernel = np.ones((5,5))
             c2_img = cv2.dilate(c2_img, kernel, iterations=2) #dilatieren
             c2_img = cv2.erode(c2_img, kernel, iterations=1) #erodieren
+            images.append(c2_img)
 
             # display contours and aprroximate contours
             # contour
-            con, area = self.find_internal_conturs(c2_img, 1000, scale) # arguments: image, threshold, scale
-            fig=plt.figure(figsize=(10, 10))
-            fig.add_subplot(1, 2, 1)
-            self.display_contour(c2_img, con, area)
+            contour, area = self.find_internal_conturs(c2_img, 1000, scale) # arguments: image, threshold, scale
+            contours.append(contour)
+            areas.append(area)
 
-            approx_contour = self.approx_contour(con) # size 3 dimension [[[]]]
-            fig.add_subplot(1, 2, 2)
-            self.display_approx_contour(c2_img, approx_contour)
-            approx_contour = np.squeeze(approx_contour, axis=1) # size 2 dimension [[]]
-            contours_list.append(approx_contour)
+            # approximate contours
+            approx_contour = self.approx_contour(contour) # size 3 dimension [[[]]]
+        
+            #
+            # approx_contour = np.squeeze(approx_contour, axis=1) # size 2 dimension [[]]
+            appro_contours_list.append(approx_contour)
 
         # contours_list = np.squeeze(contours_list, axis=1) 
-        return contours_list
+        return images, contours, areas, appro_contours_list
 
 # exsample：
 # img_processor = image_process.ImageProcessing()
