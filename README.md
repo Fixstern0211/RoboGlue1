@@ -73,8 +73,8 @@ robot_controller.move_to(path) # Robot moves along a path
 ```
 
 
-# Specific Classes and Functions
-## camera_calibration
+# Specific Modul and Classes
+## Modul camera_calibration
 The purpose of these functions is to perform camera calibration, compute distortion parameters, and correct distortion in images.
 ```python
 calibrator(n)
