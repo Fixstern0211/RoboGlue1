@@ -43,7 +43,7 @@ class RobotController():
         return new_con
 
     # move along the contour
-    def move_to(self, contour: list):
+    def move_to(self, path: list):
         pose = rob.getl()
         rx, ry, rz = pose[3:]
         for i in range(len(con_new)):
@@ -51,4 +51,4 @@ class RobotController():
             print ('%i. point' %i+1)
         start_pos = self.start_pos()
         rob.movel([start_pos, rx, ry, rz], 0.05, 0.05)
-        print ('fertig')
+        print ('finished')

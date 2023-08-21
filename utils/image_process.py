@@ -153,8 +153,9 @@ class ImageProcessor:
         
     # show internal contours
     def display_contour(self, image: any, contour, area):
-        fig=plt.figure(figsize=(10, 15))
+        fig=plt.figure(figsize=(10, 5))
         mask = np.zeros_like(image)
+        # mask = np.zeros(image.shape[:2], dtype=np.uint8)
         cv2.drawContours(mask, contour, -1, 255, 3)
         plt.imshow(mask, cmap = "gray")
         plt.title("Größe= %1.2f mm" % area)
@@ -206,7 +207,7 @@ class ImageProcessor:
             c2_img = cv2.erode(c2_img, kernel, iterations=1) #erodieren
             images.append(c2_img)
 
-            # display contours and aprroximate contours
+            # contours and aprroximate contours
             # contour
             contour, area = self.find_internal_conturs(c2_img, 1000, scale) # arguments: image, threshold, scale
             contours.append(contour)
