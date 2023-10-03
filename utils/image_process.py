@@ -7,12 +7,6 @@ import os
 class ImageProcessor:
     # Create Instance
     def __init__(self, w, h):
-        #self.criteria w = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        #self.w = 9   # 10 - 1
-        #self.h = 6   # 7  - 1
-        #self.objp = np.zeros((self.w*self.h,3), np.float32)
-        #self.objp[:,:2] = np.mgrid[0:self.w,0:self.h].T.reshape(-1,2)
-        #self.objp = self.objp*18.1  # 18.1 mm
         self.filter = 0
         # size of the reference
         self.w = w # width
@@ -20,12 +14,12 @@ class ImageProcessor:
 
     # read from folder
     def load_images(self, path: str) -> list:
-        """Load images from a specified directory"""
-        # 获取当前脚本的目录
+        #Load images from a specified directory
+        # Get the directory of the current script
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        # 获取上级目录
+        # Get parent directory
         parent_dir = os.path.dirname(script_dir)
-        # 构建指向'calibration'目录的路径
+        # Build a path to the 'calibration' directory
         path = os.path.join(parent_dir, path)
         files = os.listdir(path)
 
@@ -193,6 +187,7 @@ class ImageProcessor:
             c_img = self.preprocess(corrected_images[i])
             imgcon, cons, maxArea = self.bounding_rect(c_img, filter)
             maxbox = cons[0][2]
+            print(maxbox)
             self.reorder(maxbox)
             w_img = self.warp_img(corrected_images[i], maxbox, self.w*scale, self.h*scale)
             
@@ -216,7 +211,6 @@ class ImageProcessor:
             # approximate contours
             approx_contour = self.approx_contour(contour) # size 3 dimension [[[]]]
         
-            #
             # approx_contour = np.squeeze(approx_contour, axis=1) # size 2 dimension [[]]
             appro_contours_list.append(approx_contour)
 
