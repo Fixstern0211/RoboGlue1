@@ -13,17 +13,16 @@ def calibrator(n):
     objpoints = []
     imgpoints = []
     # images_k = glob.glob(r'calibration/*.png')
-    # 获取当前脚本的目录
+    # Get the directory of the current script
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # 获取上级目录
+    # Get parent directory
     parent_dir = os.path.dirname(script_dir)
-    # 构建指向'calibration'目录的路径
+    # Build a path to the 'calibration' directory
     path = os.path.join(parent_dir, 'calibration')
     # path = "f:/TUB/SS/SS23/APJ/RoBOGlueI/RoBOGlueI/calibration/"
     files = os.listdir(path)
     image_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff']
     images_k = [os.path.join(path, x) for x in files if os.path.isfile(os.path.join(path, x)) and os.path.splitext(x)[1].lower() in image_extensions]
-
 
     i=0
     for fname in images_k[:n]:
@@ -62,6 +61,8 @@ def para_stu(n):
     return x,y,cam
 
 # Correcting distortion
+# mtx: Camera matrix
+# dist: distortion parameter
 def correct_distortion(images: list, mtx, dist, newcameramtx) -> list:
     dst = []
     for ele in images:
