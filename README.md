@@ -177,8 +177,13 @@ initialize(self, payload)
     Parameters:
         payload: Payload of the robot.
 
-start_pos(self)
-    Parameters: None
+start_pos(self, x, y, z)
+    Parameters: x, y, z of startpoint
+    
+adjust(self, w, h):
+    Parameters:
+        w: width
+        h: height
 
 transformation(self, contour)
     Parameters:
