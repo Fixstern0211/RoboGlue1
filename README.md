@@ -53,7 +53,7 @@ corrected_images = camera_calibration.correct_distortion(images, mtx, dist, newc
 con_list = img_processor.contour_for_robot(corrected_images, scale)
 # select an image, or skip this step if there is only one image
 con = con_list[index]
-con = [ele/scale/1000 for ele in con]
+con = [ele[0]/scale/1000 for ele in con]
 ```
 
 ## 3. Instance of Robot
@@ -63,7 +63,7 @@ robot_controller.initialize(2) # payload 2 in kg
 ```
 ## 3.1 Move to the Default Start Position
 ```python
-robot_controller.start_pos() # Default start position
+robot_controller.start_pos(x,y,z) # Default start position
 ```
 
 ## 3.2 Transformation and Move along the Contour
