@@ -27,11 +27,11 @@ class RobotController():
         tmpj = (np.array(tmpj) //10 + 0.5) * np.pi
         tmpj[0] = tmp1
         tmpj[5] = tmp5
-        self.rob.movej(tmpj, 0.1, 0.09)
+        self.rob.movej(tmpj, 0.1, 0.05)
         pose = self.rob.getl()
         rx, ry, rz = pose[3:]
         # define target pose
-        # 0.250, 0.180, 0,3
+        # 0.250, 0.180, 0.3
         target_pose = [x, y, z, rx, ry, rz]  # [x, y, z, rx, ry, rz]
         # 
         self.rob.movel(target_pose, acc=0.1, vel=0.1)  #
