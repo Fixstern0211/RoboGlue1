@@ -134,7 +134,7 @@ class App:
         self.btn_init_robot.grid(row=3, column=0, padx=10, pady=10, sticky="NW")
 
         # Button for robot
-        self.btn_adjust = tk.Button(fifth_frame, text="Adjusting", command=lambda: root.after(1000, self.img_processor.adjust(self.w, self.h)))
+        self.btn_adjust = tk.Button(fifth_frame, text="Adjusting", command=lambda: root.after(1000, self.robot_controller.adjust(self.w, self.h)))
         self.btn_adjust.grid(row=4, column=0, padx=10, pady=10, sticky="NW")
 
         # Button for movw 
@@ -317,11 +317,13 @@ class App:
     # back to start position
     def init_robot(self):
         self.show_toast("Start Position")
+        x = float(self.entry_x.get())
+        y = float(self.entry_y.get())
+        z = float(self.entry_z.get())
+        print(x,y,z)
         self.robot_controller = controller.RobotController(0,0,0.08) # TCP Point
         self.robot_controller.initialize(2) # payload 2
-        x = int(self.entry_x.get())
-        y = int(self.entry_y.get())
-        z = int(self.entry_z.get())
+        
         self.robot_controller.start_pos(x, y, z) # Starting Point
 
     # controll robot to move
